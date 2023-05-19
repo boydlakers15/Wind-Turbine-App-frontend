@@ -117,15 +117,20 @@ const Map = () => {
                 lat: latitude,
                 lng: longitude,
               };
+  
+              // Update the map to center on the user's current location
+              map.setCenter(latlng);
+              marker.setPosition(latlng);
+              marker.setMap(map);
+  
+              // Perform reverse geocoding to get the address of the user's location
               geocoder
                 .geocode({ location: latlng })
                 .then((result) => {
                   const { results } = result;
                   if (results && results.length > 0) {
-                    map.setCenter(results[0].geometry.location);
-                    marker.setPosition(results[0].geometry.location);
-                    marker.setMap(map);
                     setResponse(JSON.stringify(result, null, 2));
+                    
                   }
                 })
                 .catch((e) => {

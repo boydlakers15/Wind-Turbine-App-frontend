@@ -1,44 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector  } from 'react-redux';
 import { Box, Text, Input, Textarea, Button } from '@chakra-ui/react';
-import { addWorkOrder } from '../store/workOrderSlice';
+
+import axios from 'axios';
 
 const WorkOrder = () => {
-  const dispatch = useDispatch();
-  const workOrders = useSelector((state) => state.workOrder.workOrders);
-  const [workOrder, setWorkOrder] = useState({
-    turbineModel: '',
-    description: '',
-    location: '',
-    technician: '',
-    date: '',
-  });
+  const [turbineModel, setTurbineModel] = useState('');
+  const [description, setDescription] = useState('');
+  const [location, setLocation] = useState('');
+  const [technician, setTechnician] = useState('');
+  const [date, setDate] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setWorkOrder((prevWorkOrder) => ({
-      ...prevWorkOrder,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Dispatch the addWorkOrder action to store the work order
-    dispatch(addWorkOrder(workOrder));
-    // Reset the form
-    setWorkOrder({
-      turbineModel: '',
-      description: '',
-      location: '',
-      technician: '',
-      date: '',
-    });
+    try {
+      const response = await axios.post('https://wind-turbine-app-backend.onrender.com/work/work-orders', {
+        turbineModel: turbineModel,
+        description: description,
+        location: location,
+        technician: technician,
+        date: date
+      });
+      console.log('User signed up:', response.data);
+      // Reset the form fields
+      setTurbineModel('');
+      setDescription('');
+      setLocation('');
+      setTechnician('');
+      setDate();
+      // Redirect to the wind turbines page or perform any other desired action
+      window.location.href = '/profile';
+    } catch (error) {
+      console.error('Error submit didnt work:', error);
+    }
   };
 
-  useEffect(() => {
-    console.log(workOrders);
-  }, [workOrders]);
+
   // 39.627038, -2.287618
   // 39.630678, -2.284431
   // 39.634185, -2.281091
@@ -63,8 +59,8 @@ const WorkOrder = () => {
           <Input
             type="text"
             name="turbineModel"
-            value={workOrder.turbineModel}
-            onChange={handleChange}
+            value={turbineModel}
+            onChange={(e) => setTurbineModel(e.target.value)}
             placeholder="Enter turbine model"
             required
           />
@@ -75,8 +71,8 @@ const WorkOrder = () => {
           </Text>
           <Textarea
             name="description"
-            value={workOrder.description}
-            onChange={handleChange}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter work order description"
             required
           />
@@ -88,8 +84,8 @@ const WorkOrder = () => {
           <Input
             type="text"
             name="location"
-            value={workOrder.location}
-            onChange={handleChange}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
             placeholder="Enter Location"
             required
           />
@@ -101,8 +97,8 @@ const WorkOrder = () => {
           <Input
             type="text"
             name="technician"
-            value={workOrder.technician}
-            onChange={handleChange}
+            value={technician}
+            onChange={(e) => setTechnician(e.target.value)}
             placeholder="Enter technician name"
             required
           />
@@ -114,8 +110,8 @@ const WorkOrder = () => {
           <Input
             type="date"
             name="date"
-            value={workOrder.date}
-            onChange={handleChange}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             required
           />
         </Box>

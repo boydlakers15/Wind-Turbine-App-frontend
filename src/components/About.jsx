@@ -22,9 +22,10 @@ const About = () => {
           <p className="about-description">
             By prioritizing continuous improvement, innovation, and exceptional customer service, we aim to be leaders in the wind energy industry. We are dedicated to pushing the boundaries, exploring new technologies, and implementing best practices to drive the advancement of clean, green energy.
           </p>
-          <a href="/wind-turbines" className="about-link">Browse Wind Turbines</a>
+          
           <div className="footer-section">
           <h5 className="footer-section-title">Opening Hours</h5>
+          <center>
           <table className="table text-center text-white">
             
             <tbody className="font-weight-normal">
@@ -42,6 +43,7 @@ const About = () => {
               </tr>
             </tbody>
           </table>
+          </center>
         </div>
         </div>
         

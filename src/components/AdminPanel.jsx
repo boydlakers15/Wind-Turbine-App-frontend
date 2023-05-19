@@ -10,31 +10,43 @@ const AdminPanel = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:5005/users/all');
+      const response = await axios.get('https://wind-turbine-app-backend.onrender.com/users/all', 
+      { withCredentials: true });
+
       setUsers(response.data);
     } catch (error) {
       console.error('Failed to fetch users', error);
     }
   };
 
-  const handleRoleChange = async (userId, newRole) => {
+  const handleFieldChange = async (userId, field, value) => {
     try {
-      await axios.put(`http://localhost:5005/users/${userId}`, { role: newRole });
+      console.log(`Updating user ${userId} field ${field} to ${value}`);
+      const response = await axios.put(`https://wind-turbine-app-backend.onrender.com/users/update/${userId}`, {
+        [field]: value
+      });
+      console.log(`Updated user ${userId}:`, response.data);
       fetchUsers(); // Refresh the user list after the update
     } catch (error) {
-      console.error('Failed to update user role', error);
+      console.error(`Failed to update user ${field}`, error);
     }
   };
-
-  const handleAdminChange = async (userId, newIsAdmin) => {
+  
+  const toggleAdminStatus = async (userId, currentStatus) => {
     try {
-      await axios.put(`http://localhost:5005/users/${userId}`, { isAdmin: newIsAdmin });
+      const newStatus = !currentStatus; // Toggle the value
+      console.log(`Toggling admin status for user ${userId}. New status: ${newStatus}`);
+      const response = await axios.put(`https://wind-turbine-app-backend.onrender.com/users/all/update/${userId}`, {
+        isAdmin: newStatus
+      });
+      console.log(`Updated user ${userId}:`, response.data);
       fetchUsers(); // Refresh the user list after the update
     } catch (error) {
       console.error('Failed to update user admin status', error);
     }
   };
-
+  
+  
   return (
     <div>
       <h2>Admin Panel</h2>
@@ -44,7 +56,6 @@ const AdminPanel = () => {
             <th>ID</th>
             <th>Username</th>
             <th>Email</th>
-            <th>Role</th>
             <th>Admin</th>
           </tr>
         </thead>
@@ -55,22 +66,9 @@ const AdminPanel = () => {
               <td>{user.userName}</td>
               <td>{user.email}</td>
               <td>
-                <select
-                  value={user.role}
-                  onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </td>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={user.isAdmin}
-                  onChange={(e) =>
-                    handleAdminChange(user._id, e.target.checked)
-                  }
-                />
+              <button onClick={() => toggleAdminStatus(user._id, user.isAdmin)}>
+                {user.isAdmin ? 'Make User' : 'Make Admin'}
+              </button>
               </td>
             </tr>
           ))}
@@ -79,6 +77,7 @@ const AdminPanel = () => {
       {/* Add other admin panel functionality here */}
     </div>
   );
+  
 };
 
 export default AdminPanel;
