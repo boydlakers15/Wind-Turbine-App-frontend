@@ -1,21 +1,21 @@
 import React from 'react';
 import '../styles/Footer.css';
 import logo from '../img/company logo.jpg';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaFacebookSquare, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-bottom">
-      <div className="footer-content">
+      {/* <div className="footer-content">
         <div className="footer-section">
           <img src={logo} alt="Logo" className="footer-logo" />
         </div>
-      </div>
+      </div> */}
         <div className="footer-section">
-          <h3>Follow Us</h3>
+          {/* <h3>Follow Us</h3> */}
           <div className="social-icons">
-            <a href="https://www.facebook.com/"><FaFacebook /></a>
+            <a href="https://www.facebook.com/"><FaFacebookSquare /></a>
             <a href="https://www.instagram.com/"><FaTwitter /></a>
             <a href="https://twitter.com"><FaInstagram /></a>
           </div>
